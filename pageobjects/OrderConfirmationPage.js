@@ -1,25 +1,25 @@
-const { page } = require('@playwright/test');
+const { page, expect } = require('@playwright/test');
 
 class OrderConfirmationPage {
     constructor(page) {
         this.page = page;
         this.pageHeaderText = " Thankyou for the order.";
         this.pageHeader = page.locator(".hero-primary");
-        this.ordersButton = page.locator(".btn.btn-custom[routerlink='/dashboard/myorders']");
+        this.ordersButton = page.locator("button[routerlink*='myorders']");
+        this.orderId = page.locator(".em-spacer-1 .ng-star-inserted");
     }
 
     async validatePageContent() {
-        await expect(pageHeader.toHaveText(pageHeaderText));
+        await expect(this.pageHeader).toContainText(this.pageHeaderText);
     }
 
     async getOrderID() {
-        placedOrderIds = await page.$$eval('.em-spacer-1 .ng-star-inserted', labels => {
-            return labels.map(label => label.textContent.trim());
-        });
+        let orderID = await this.orderId.textContent();
+        return orderID;
     }
 
     async goToOrders() {
-        await placeOrderButton.click();
+        await this.ordersButton.click();
     }
 }
 module.exports = { OrderConfirmationPage };

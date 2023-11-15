@@ -1,4 +1,4 @@
-const { page } = require('@playwright/test');
+const { page, expect } = require('@playwright/test');
 
 class CartPage {
     constructor(page) {
@@ -7,13 +7,13 @@ class CartPage {
     }
 
     async itemInCartValidation() {
-        await page.locator("div li").first().waitFor();
-        const isItemPresentInCart = await page.locator("h3:has-text('adidas original')").isVisible();
+        await this.page.locator("div li").first().waitFor();
+        const isItemPresentInCart = await this.page.locator("h3:has-text('adidas original')").isVisible();
         expect(isItemPresentInCart).toBeTruthy();
     }
 
     async goToCheckout() {
-        await checkoutButton.click();
+        await this.checkoutButton.click();
     }
 }
 module.exports = {CartPage};

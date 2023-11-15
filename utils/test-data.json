@@ -1,0 +1,28 @@
+{
+    "userRegistration": {
+        "firstName": "John",
+        "lastName": "Dough",
+        "email": "johndough@gmail.com",
+        "phoneNumber": "1234567891",
+        "password": "Password!23"
+    },
+    "userLogin": {
+        "email": "johndough@gmail.com",
+        "password": "Password!23"
+    },
+    "shippingInfo": {
+        "creditcardNumber": "1234 5678 7891 2345",
+        "expiryDateMonth": "06",
+        "expiryDateDay": "10",
+        "cvvCode": "666",
+        "nameOnCard": "Ultimate",
+        "coupon": "rahulshettyacademy",
+        "country": "ind"
+    },
+    "orderValidation": {
+        "email": "johndough@gmail.com",
+        "country": "Country - India",
+        "productTitle": "adidaas original",
+        "productPrice": "$ 31500"
+    }
+}

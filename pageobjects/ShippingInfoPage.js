@@ -1,4 +1,4 @@
-const { page } = require('@playwright/test');
+const { page, expect } = require('@playwright/test');
 
 class ShippingInfoPage {
     constructor(page) {
@@ -11,36 +11,44 @@ class ShippingInfoPage {
         this.applyCouponField = page.locator("input[name='coupon']");
         this.applyCouponButton = page.locator("button[type='submit']");
         this.selectCountryField = page.locator("input[placeholder='Select Country']");
-        this.emailShippingInfoField = page.locator(".input.txt.text-validated.ng-pristine.ng-valid.ng-touched")
-        this.userEmail = "johndough@gmail.com";
+        this.emailShippingInfoField = page.locator(".input.txt.text-validated.ng-pristine.ng-valid.ng-touched");
         this.countryDropdown = page.locator(".ta-results");
         this.placeOrderButton = page.locator(".btnn.action__submit.ng-star-inserted");
         this.userLocation = "India";
+        this.typedCountry = "ind";
     }
 
-    async fillAndSubmitshippingForm(creditCardNumber, expiryDateMonth, expiryDateDay, cvvCode, coupon, country) {
-        await creditcardNumberField.fill(creditCardNumber);
-        await expiryDateMonthDropdown.selectOption(expiryDateMonth);
-        await expiryDateDayDropdown.selectOption(expiryDateDay);
-        await cvvCodeField.fill(cvvCode);
-        await nameOnCard.fill(nameOnCard);
-        await applyCouponField.fill(coupon);
-        await applyCouponButton.click();
-        await page.waitForTimeout(5000);
-        await expect(emailShippingInfoField).toHaveText(userEmail)
-        await selectCountryField.pressSequentially(country, { delay: 100 });
-        await countryDropdown.waitFor();
+    async fillAndSubmitshippingForm(creditCardNumber, expiryDateMonth, expiryDateDay, cvvCode, nameOnCard, coupon, country) {
+        await this.creditcardNumberField.fill(creditCardNumber);
+        await this.expiryDateMonthDropdown.selectOption(expiryDateMonth);
+        await this.expiryDateDayDropdown.selectOption(expiryDateDay);
+        await this.cvvCodeField.fill(cvvCode);
+        await this.nameOnCard.fill(nameOnCard);
+        await this.applyCouponField.fill(coupon);
+        await this.applyCouponButton.click();
+        await this.page.waitForTimeout(2000);
+        await this.typeIntoField(this.typedCountry, 100)
+        await this.countryDropdown.waitFor();
 
-        let optionsCount = await countryDropdown.locator("button").count();
+        let optionsCount = await this.countryDropdown.locator("button").count();
         for (let i = 0; i < optionsCount; i++) {
-            let text = await countryDropdown.locator("button").nth(i).textContent();
+            let text = await this.countryDropdown.locator("button").nth(i).textContent();
             if (text.trim() === this.userLocation) {
-                await countryDropdown.locator("button").nth(i).click();
+                await this.countryDropdown.locator("button").nth(i).click();
                 break;
             }
         }
 
-        await placeOrderButton.click();
+        await this.placeOrderButton.click();
+    }
+
+    async typeIntoField(text, delay) {
+        await this.selectCountryField.click(); 
+    
+        for (const char of text) {
+            await this.page.keyboard.press(char, { delay });
+        }
     }
 }
-module.exports = {ShippingInfoPage};
+
+module.exports = { ShippingInfoPage };

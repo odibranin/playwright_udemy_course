@@ -5,9 +5,10 @@ const { CartPage } = require('../pageobjects/CartPage');
 const { ShippingInfoPage } = require('../pageobjects/ShippingInfoPage');
 const { OrderConfirmationPage } = require('../pageobjects/OrderConfirmationPage');
 const { OrdersPage } = require('../pageobjects/OrdersPage');
+const { OrderSummaryPage } = require('../pageobjects/OrderSummaryPage');
 
 class POManager {
-    constructo(page) {
+    constructor(page) {
         this.page = page;
         this.RegistrationPage = new RegistrationPage(this.page);
         this.LoginPage = new LoginPage(this.page);
@@ -16,6 +17,7 @@ class POManager {
         this.ShippingInfoPage = new ShippingInfoPage(page);
         this.OrderConfirmationPage = new OrderConfirmationPage(page);
         this.OrdersPage = new OrdersPage(page);
+        this.OrderSummaryPage = new OrderSummaryPage(page);
     }
 
     getRegistrationPage() {
@@ -31,7 +33,7 @@ class POManager {
     }
 
     getCartPage() {
-    return this.CartPage;
+        return this.CartPage;
     }
 
     getShippingInfoPage() {
@@ -44,6 +46,10 @@ class POManager {
 
     getOrderPage() {
         return this.OrdersPage;
+    }
+
+    getOrderSummaryPage() {
+        return this.OrderSummaryPage;
     }
 }
 module.exports = { POManager };

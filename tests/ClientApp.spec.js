@@ -1,59 +1,71 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { POManager } = require('../utils/POManager');
-const { regUserData } = JSON.parse(JSON.stringify(require('../utils/userRegistrationTestData.json')));
-const { logUserData } = JSON.parse(JSON.stringify(require('../utils/userLoginTestData.json')));
-const { shippingUserData } = JSON.parse(JSON.stringify(require('../utils/shippingInfoTestData.json')));
+const data = JSON.parse(JSON.stringify(require('../utils/test-data.json')));
 
-test('User registers', async ({ browser }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const poManager = new POManager();
+test('User registers', async ({ page }) => {
+    const poManager = new POManager(page);
     const registrationPage = poManager.getRegistrationPage();
-    registrationPage.visitRegistrationPage();
-    registrationPage.fillAndSumbitRegistratioForm(
-        regUserData.firstname,
-        regUserData.lastName,
-        regUserData.email,
-        regUserData.phoneNumber,
-        phoneNumber.password
+
+    // Perform user registration
+    await registrationPage.visitRegistrationPage();
+    await registrationPage.fillAndSumbitRegistratioForm(
+        data.userRegistration.firstName,
+        data.userRegistration.lastName,
+        data.userRegistration.email,
+        data.userRegistration.phoneNumber,
+        data.userRegistration.password
     );
+});
 
-})
-
-test.only('User dynamically finds the product', async ({ page }) => {
-    const poManager = new POManager();
+test.only('User adds product to cart and completes checkout', async ({ page }) => {
+    const poManager = new POManager(page);
     const loginPage = poManager.getLoginPage();
-    loginPage.visitLoginPage();
-    loginPage.fillAndSubmitLoginForm(logUserData.email, logUserData.password);
 
-    const productsPage = poManager.getProductsPage();
-    productsPage.addProductToCart();
-    productsPage.goToCart();
-
-    const cartPage = poManager.getCartPage();
-    cartPage.itemInCartValidation();
-    cartPage.goToCheckout();
-
-    const shippingInfoPage = poManager.getShippingInfoPage();
-    shippingInfoPage.fillAndSubmitshippingForm(
-        shippingUserData.creditcardNumber,
-        shippingUserData.expiryDateMonth,
-        shippingUserData.expiryDateDay,
-        shippingUserData.cvvCode,
-        shippingUserData.nameOnCard,
-        shippingUserData.coupon,
-        shippingUserData.country
+    // Log in
+    await loginPage.visitLoginPage();
+    await loginPage.fillAndSubmitLoginForm(
+        data.userLogin.email,
+        data.userLogin.password
     );
 
+    // Add product to cart
+    const productsPage = poManager.getProductsPage();
+    await productsPage.addProductToCart();
+    await productsPage.goToCart();
+
+    // Validate item presence in cart
+    const cartPage = poManager.getCartPage();
+    await cartPage.itemInCartValidation();
+    await cartPage.goToCheckout();
+
+    // Fill shipping information
+    const shippingInfoPage = poManager.getShippingInfoPage();
+    await shippingInfoPage.fillAndSubmitshippingForm(
+        data.shippingInfo.creditcardNumber,
+        data.shippingInfo.expiryDateMonth,
+        data.shippingInfo.expiryDateDay,
+        data.shippingInfo.cvvCode,
+        data.shippingInfo.nameOnCard,
+        data.shippingInfo.coupon,
+        data.shippingInfo.country
+    );
+
+    // Validate order confirmation
     const orderConfirmationPage = poManager.getOrderConfirmationPage();
-    orderConfirmationPage.validatePageContent();
-    orderID = orderConfirmationPage.getOrderID();
-    orderConfirmationPage.goToOrders();
+    await orderConfirmationPage.validatePageContent();
+    let orderID = await orderConfirmationPage.getOrderID();
+    console.log(orderID); 
+    await orderConfirmationPage.goToOrders();
 
+    // Validate order presence in orders
     const ordersPage = poManager.getOrderPage();
-    ordersPage.validateRecentOrderIsPresent(orderID)
+    await ordersPage.searchOrderAndSelect(orderID);
 
+    // Validate order info in order summary page
+    const orderSummaryPage = poManager.getOrderSummaryPage();
+    orderSummaryPage.validatePageContent(orderID);
+
+    // Optional pause for debugging
     await page.pause();
-})
-
+});
 

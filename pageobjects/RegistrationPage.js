@@ -1,22 +1,23 @@
-const{page} = require('@playwright/test');
+const { page } = require('@playwright/test');
 
 class RegistrationPage {
     constructor(page) {
-    this.registerLinkButton = page.locator(".btn1");
-    this.firstNameField = page.locator("#firstName");
-    this.lastNameField = page.locator("#lastName");
-    this.emailField = page.locator("#userEmail");
-    this.phoneNumberField = page.locator("#userMobile");
-    this.dropdown = page.locator(".custom-select");
-    this.maleRadioButton = page.locator("input[value='Male']");
-    this.userPasswordField = page.locator("#userPassword");
-    this.confirmPasswordField = page.locator("#confirmPassword");
-    this.ageCheckbox = page.locator(".col-md-1");
-    this.registerButton = page.locator("#login");
+        this.page = page;
+        this.registerLinkButton = page.locator(".btn1");
+        this.firstNameField = page.locator("#firstName");
+        this.lastNameField = page.locator("#lastName");
+        this.emailField = page.locator("#userEmail");
+        this.phoneNumberField = page.locator("#userMobile");
+        this.dropdown = page.locator(".custom-select");
+        this.maleRadioButton = page.locator("input[value='Male']");
+        this.userPasswordField = page.locator("#userPassword");
+        this.confirmPasswordField = page.locator("#confirmPassword");
+        this.ageCheckbox = page.locator(".col-md-1");
+        this.registerButton = page.locator("#login");
     }
 
     async visitRegistrationPage() {
-        await page.goto("https://rahulshettyacademy.com/client");
+        await this.page.goto("https://rahulshettyacademy.com/client");
     }
 
     async fillAndSumbitRegistratioForm(firstName, lastName, email, number, password) {
@@ -32,7 +33,7 @@ class RegistrationPage {
         await this.ageCheckbox.click();
         await this.registerButton.click();
     }
-    }
+}
 
-    module.exports = {RegistrationPage};
-    
+module.exports = { RegistrationPage };
+
