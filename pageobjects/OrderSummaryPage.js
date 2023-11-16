@@ -6,13 +6,13 @@ class OrderSummaryPage {
         this.page = page;
         this.orderId = page.locator(".col-text.-main");
         this.pageHeader = page.locator('.email-title');
-        this.billingAdressEmail = this.billingAdressInfo.locator(".text");
-        this.billingAdressCountry = this.billingAdressInfo.locator(".text").nth(1);
-        this.deliveryAdressEmail = this.deliveryAddressInfo.locator(".text").first();
-        this.deliveryAdressCountry = this.deliveryAddressInfo.locator(".text").nth(1);
-        this.productTitle = page.locator('.artwork-card .title');
-        this.productPrice = page.locator('.artwork-card .price');
-        this.viewOrdersButtonText = page.locator('.artwork-card .price');
+        this.billingAdressEmail = page.locator("body > app-root:nth-child(1) > app-order-details:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > p:nth-child(2)");
+        this.billingAdressCountry = page.locator("body > app-root:nth-child(1) > app-order-details:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > p:nth-child(3)");
+        this.deliveryAdressEmail = page.locator("body > app-root:nth-child(1) > app-order-details:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > p:nth-child(2)");
+        this.deliveryAdressCountry = page.locator("body > app-root:nth-child(1) > app-order-details:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > p:nth-child(3)");
+        this.productTitle = page.locator(".artwork-card .title");
+        this.productPrice = page.locator(".artwork-card .price");
+        this.viewOrdersButtonText = page.locator(".btn.-teal");
     }
 
     async validatePageContent(orderId) {
@@ -40,7 +40,7 @@ class OrderSummaryPage {
         // Validate Delivery Country
         const deliveryAdressCountryText = await this.deliveryAdressCountry.textContent();
         expect(deliveryAdressCountryText).toContain(data.orderValidation.country);
-        
+
         // Validate Product Title
         const productTitle = await this.productTitle.textContent();
         expect(productTitle).toContain(data.orderValidation.productTitle);

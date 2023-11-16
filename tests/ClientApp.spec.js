@@ -53,8 +53,7 @@ test.only('User adds product to cart and completes checkout', async ({ page }) =
     // Validate order confirmation
     const orderConfirmationPage = poManager.getOrderConfirmationPage();
     await orderConfirmationPage.validatePageContent();
-    let orderID = await orderConfirmationPage.getOrderID();
-    console.log(orderID); 
+    let orderID = await orderConfirmationPage.getOrderID(); 
     await orderConfirmationPage.goToOrders();
 
     // Validate order presence in orders
