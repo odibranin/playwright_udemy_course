@@ -17,7 +17,7 @@ test('User registers', async ({ page }) => {
     );
 });
 
-test.only('User adds product to cart and completes checkout', async ({ page }) => {
+test('User adds product to cart and completes checkout', async ({ page }) => {
     const poManager = new POManager(page);
     const loginPage = poManager.getLoginPage();
 
